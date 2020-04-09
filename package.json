@@ -1,0 +1,30 @@
+{
+  "name": "quarantinewishes",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "cd api && knex migrate:latest && node index.js",
+    "dev": "nodemon api/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@koa/cors": "^2.2.3",
+    "knex": "^0.20.13",
+    "koa": "^2.11.0",
+    "koa-bodyparser": "^4.3.0",
+    "koa-bouncer": "^6.0.4",
+    "koa-logger": "^3.2.1",
+    "koa-respond": "^2.1.0",
+    "koa-router": "^8.0.8",
+    "koa-static": "^5.0.0",
+    "pg": "^8.0.0"
+  },
+  "devDependencies": {
+    "dotenv": "^8.2.0",
+    "nodemon": "^2.0.3"
+  }
+}
