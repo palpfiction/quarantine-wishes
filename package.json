@@ -13,6 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "@koa/cors": "^2.2.3",
+    "dotenv": "^8.2.0",
     "knex": "^0.20.13",
     "koa": "^2.11.0",
     "koa-bodyparser": "^4.3.0",
@@ -24,7 +25,6 @@
     "pg": "^8.0.0"
   },
   "devDependencies": {
-    "dotenv": "^8.2.0",
     "nodemon": "^2.0.3"
   }
 }
