@@ -1,14 +1,23 @@
 const router = require("koa-router")();
 const service = require("../service/wish");
 const date = require("../db/postgres").timestamp;
+
 const BASE_PATH = "/api";
+const LIMIT = 10;
+const OFFSET = 0;
 
 router.get(`${BASE_PATH}`, (ctx) => {
   ctx.ok(`welcome, bro in the ip ${ctx.request.ip}`);
 });
 
 router.get(`${BASE_PATH}/wish`, async (ctx) => {
-  const wishes = await service.getAll();
+  ctx.validateQuery("limit").optional().toInt();
+  ctx.validateQuery("offset").optional().toInt();
+
+  const wishes = await service.getAll(
+    ctx.vals.limit || LIMIT,
+    ctx.vals.offset || OFFSET
+  );
 
   ctx.ok({ wishes });
 });
@@ -17,7 +26,6 @@ router.get(`${BASE_PATH}/wish/:id`, async (ctx) => {
   ctx.validateParam("id").required("id must be provided").toInt();
 
   const wish = await service.get(ctx.vals.id);
-  console.log(wish);
   if (!wish)
     return ctx.notFound({ error: `wish with id ${ctx.vals.id} not found` });
 
@@ -37,7 +45,7 @@ router.post(`${BASE_PATH}/wish`, async (ctx) => {
     .isString("publisher must be a string")
     .isLength(3, 30, "publisher must be 3-30 chars");
 
-  const wish = await service.store({
+  const wish = await service.post({
     text: ctx.vals.text,
     publisher: ctx.vals.publisher,
     ip: ctx.request.ip,

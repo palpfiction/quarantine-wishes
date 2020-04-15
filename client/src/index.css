@@ -1,0 +1,11 @@
+:root {
+  --grey: #666;
+  --darkGrey: #444;
+  --fontSize: 24px;
+}
+
+@media only screen and (max-width: 1000px) {
+  :root {
+    --fontSize: 18px;
+  }
+}

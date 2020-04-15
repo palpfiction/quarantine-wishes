@@ -1,8 +1,10 @@
 const repository = require("../repository/wishrepository");
 
+const MAX_WISHES_PER_DAY = 2;
+
 module.exports = {
-  async getAll() {
-    const wishes = await repository.getAll();
+  async getAll(limit, offset) {
+    const wishes = await repository.getAll(limit, offset);
     return wishes;
   },
 
@@ -11,7 +13,12 @@ module.exports = {
     return wish;
   },
 
-  async store(wish) {
+  async post(wish) {
+    const ipWishCount = await repository.getIPWishCountLastDay(wish.ip);
+    if (ipWishCount > MAX_WISHES_PER_DAY)
+      return {
+        error: `sorry, you've posted too many wishes today. see you tomorrow!`,
+      };
     const storedWish = await repository.store(wish);
     return storedWish;
   },
