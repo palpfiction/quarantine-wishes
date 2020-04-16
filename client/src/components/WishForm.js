@@ -61,7 +61,7 @@ export default class WishForm extends Component {
     event.preventDefault();
 
     this.setState({
-      [event.target.name]: event.target.value,
+      [event.target.name]: event.target.value.toLowerCase(),
     });
   }
 
@@ -80,6 +80,7 @@ export default class WishForm extends Component {
         <form onSubmit={this.handleSubmit}>
           <TextArea
             name="text"
+            value={this.state.text}
             type="textarea"
             rows={3}
             maxLength={300}
@@ -88,6 +89,7 @@ export default class WishForm extends Component {
           />
           <Input
             name="publisher"
+            value={this.state.publisher}
             type="text"
             placeholder="your name?"
             onChange={this.handleInputChange}

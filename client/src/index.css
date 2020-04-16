@@ -2,6 +2,8 @@
   --grey: #666;
   --darkGrey: #444;
   --fontSize: 24px;
+
+  text-transform: lowercase;
 }
 
 @media only screen and (max-width: 1000px) {
