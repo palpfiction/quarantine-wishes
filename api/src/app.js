@@ -10,7 +10,8 @@ const ratelimit = require("koa-ratelimit");
 const app = new Koa();
 
 const PORT = process.env.PORT || 3000;
-const RATE_LIMIT_DURATION = 3600000;
+const RATE_LIMIT = process.env.RATE_LIMIT || 1000;
+const RATE_LIMIT_DURATION = process.env.RATE_LIMIT_DURATION || 3600000;
 
 app.use(logger());
 app.use(cors());
@@ -30,7 +31,7 @@ app.use(
       reset: "Rate-Limit-Reset",
       total: "Rate-Limit-Total",
     },
-    max: 1000,
+    max: RATE_LIMIT_DURATION,
     disableHeader: false,
   })
 );

@@ -4,9 +4,11 @@ import styled from "styled-components";
 import Wish from "./Wish";
 import WishForm from "./WishForm";
 import Error from "./Error";
+import InfiniteScroll from "react-infinite-scroller";
 
 const WISH_ENDPOINT = "api/wish";
 const UNKOWN_ERROR = "unkown error... sorry...";
+const ITEMS_PER_PAGE = 3;
 
 const WishesContainer = styled.div`
   max-width: 600px;
@@ -14,7 +16,8 @@ const WishesContainer = styled.div`
 `;
 
 const Box = styled.span`
-  margin-bottom: 1rem;
+  margin: 1.5rem;
+  padding: 0.75rem 1rem;
   display: inline-block;
 `;
 
@@ -24,17 +27,17 @@ class App extends Component {
 
     this.state = {
       wishes: [],
-      offset: 0,
-      noMoreWishes: false,
-      loading: true,
+      moreWishes: true,
+      loading: false,
     };
 
     this.getWishes = this.getWishes.bind(this);
+    this.loadWishes = this.loadWishes.bind(this);
     this.postWish = this.postWish.bind(this);
   }
 
   componentDidMount() {
-    this.getWishes();
+    //this.getWishes();
   }
 
   getWishes() {
@@ -54,29 +57,27 @@ class App extends Component {
       });
   }
 
-  getMoreWishes() {
-    this.setState({ loading: true });
+  /**
+   * load wishes for infinite scrolling
+   * @param {Integer} page the page to load
+   */
+  loadWishes(page) {
+    const limit = ITEMS_PER_PAGE;
+    const offset = (page - 1) * ITEMS_PER_PAGE;
 
-    let url = new URL(WISH_ENDPOINT),
-      params = { offset: this.state.offset };
-    Object.keys(params).forEach((key) =>
-      url.searchParams.append(key, params[key])
-    );
-
-    fetch(url)
+    fetch(`${WISH_ENDPOINT}?limit=${limit}&offset=${offset}`)
       .then((res) => {
-        if (!res.ok)
-          return this.setState({ loading: false, error: UNKOWN_ERROR });
-        res.json();
+        if (!res.ok) return this.setState({ error: UNKOWN_ERROR });
+        return res.json();
       })
       .then((data) => {
-        if (data.wishes.length === 0)
-          return this.setState({ loading: false, noMoreWishes: true });
+        if (!data || data.wishes.length === 0)
+          return this.setState({ moreWishes: false });
 
+        let wishes = this.state.wishes;
+        wishes.push(...data.wishes);
         this.setState({
-          wishes: this.state.wishes.unshift(...data.wishes),
-          offset: this.state.offset + data.wishes.length,
-          loading: false,
+          wishes: wishes,
         });
       });
   }
@@ -96,13 +97,17 @@ class App extends Component {
         return this.setState({ error: UNKOWN_ERROR });
       response.json().then((data) => {
         if (data.error) return this.setState({ error: data.error });
-        this.getWishes();
+        let wishes = this.state.wishes;
+        wishes.unshift(data.wish);
+        this.setState({
+          wishes: wishes,
+        });
       });
     });
   }
 
-  renderWishesSkeleton() {
-    return <Skeleton width={600} height={150} count={3} wrapper={Box} />;
+  renderWishesSkeleton(key) {
+    return <Skeleton key={key} height={150} count={3} wrapper={Box} />;
   }
 
   render() {
@@ -116,20 +121,29 @@ class App extends Component {
           {this.state.error ? <Error error={this.state.error} /> : null}
           <WishForm onSubmit={this.postWish} />
         </r-cell>
-        <r-cell span="4" span-s="row">
-          <WishesContainer>
-            {this.state.loading ? (
-              this.renderWishesSkeleton()
-            ) : this.state.wishes.length ? (
-              <>
-                {this.state.wishes.map((wish) => (
+        <r-cell
+          span="4"
+          span-s="row"
+          innerRef={(ref) => (this.scrollParentRef = ref)}
+        >
+          <InfiniteScroll
+            pageStart={0}
+            loadMore={this.loadWishes}
+            hasMore={this.state.moreWishes}
+            loader={this.renderWishesSkeleton("infinite-scroller")}
+            getScrollParent={() => this.scrollParentRef}
+            element={WishesContainer}
+          >
+            <>
+              {this.state.wishes.length === 0 && !this.state.moreWishes ? (
+                <Box>no wishes yet... dare to send the first one?</Box>
+              ) : (
+                this.state.wishes.map((wish) => (
                   <Wish {...wish} key={wish.id} />
-                ))}
-              </>
-            ) : (
-              <div>no hay wishes...</div>
-            )}
-          </WishesContainer>
+                ))
+              )}
+            </>
+          </InfiniteScroll>
         </r-cell>
       </r-grid>
     );
