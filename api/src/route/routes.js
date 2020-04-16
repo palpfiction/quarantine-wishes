@@ -29,7 +29,7 @@ router.get(`${BASE_PATH}/wish/:id`, async (ctx) => {
   if (!wish)
     return ctx.notFound({ error: `wish with id ${ctx.vals.id} not found` });
 
-  ctx.ok({ wish });
+  ctx.ok(wish);
 });
 
 router.post(`${BASE_PATH}/wish`, async (ctx) => {
@@ -57,7 +57,7 @@ router.post(`${BASE_PATH}/wish`, async (ctx) => {
       error: `i don't really know what happened...`,
     });
 
-  ctx.ok({ wish });
+  ctx.ok(wish);
 });
 
 router.delete(`${BASE_PATH}/wish/:id`, async (ctx) => {
