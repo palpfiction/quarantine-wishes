@@ -7,6 +7,8 @@ const bodyParser = require("koa-bodyparser");
 const bouncer = require("koa-bouncer");
 const handleBouncerError = require("./middleware/handle-bouncer-error");
 const ratelimit = require("koa-ratelimit");
+const send = require("koa-send");
+const Router = require("koa-router");
 const app = new Koa();
 
 const PORT = process.env.PORT || 3000;
@@ -37,9 +39,21 @@ app.use(
 );
 
 app.use(require("./route/routes").routes());
+
+const reactRoute = new Router();
+reactRoute.get("/", async (ctx) => {
+  await send(ctx, "index.html", { root: __dirname + "/client/build" });
+});
+
+app.use(reactRoute.routes());
+
+app.use(async (ctx) => {
+  await send(ctx, ctx.path, { root: __dirname + "/client/build" });
+});
+
 app.start = (port = PORT) => {
   app.listen(port, () => {
-    console.log(`listening on http://localost:${port}`);
+    console.log(`listening on http://localhost:${port}`);
   });
 };
 

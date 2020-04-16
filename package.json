@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "cd api && knex migrate:latest && node index.js",
+    "start": "knex migrate:latest && node index.js",
+    "heroku-postbuild": "cd src/client && npm install && npm run build",
     "dev": "nodemon api/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -22,7 +23,7 @@
     "koa-ratelimit": "^4.2.1",
     "koa-respond": "^2.1.0",
     "koa-router": "^8.0.8",
-    "koa-static": "^5.0.0",
+    "koa-send": "^5.0.0",
     "pg": "^8.0.0"
   },
   "devDependencies": {

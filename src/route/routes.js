@@ -1,4 +1,5 @@
 const router = require("koa-router")();
+const send = require("koa-send");
 const service = require("../service/wish");
 const date = require("../db/postgres").timestamp;
 
@@ -7,7 +8,7 @@ const LIMIT = 10;
 const OFFSET = 0;
 
 router.get(`${BASE_PATH}`, (ctx) => {
-  ctx.ok(`welcome, bro in the ip ${ctx.request.ip}`);
+  ctx.ok(`wish api...`);
 });
 
 router.get(`${BASE_PATH}/wish`, async (ctx) => {

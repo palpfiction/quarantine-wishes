@@ -8,7 +8,7 @@ import InfiniteScroll from "react-infinite-scroller";
 
 const WISH_ENDPOINT = "api/wish";
 const UNKOWN_ERROR = "unkown error... sorry...";
-const ITEMS_PER_PAGE = 3;
+const ITEMS_PER_PAGE = 10;
 
 const WishesContainer = styled.div`
   max-width: 600px;
