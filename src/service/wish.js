@@ -15,8 +15,6 @@ module.exports = {
 
   async post(wish) {
     const ipWishCount = await repository.getIPWishCountLastDay(wish.ip);
-    console.log(MAX_WISHES_PER_DAY);
-    console.log(ipWishCount[0].count);
 
     if (
       ipWishCount &&

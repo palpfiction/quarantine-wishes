@@ -1,17 +1,26 @@
 {
   "name": "quarantinewishes",
   "version": "1.0.0",
-  "description": "",
+  "description": "twitter-like website to tell the world what you want to do when quarantine is over! ",
   "main": "index.js",
   "scripts": {
     "start": "knex migrate:latest && node index.js",
     "heroku-postbuild": "cd src/client && npm install && npm run build",
-    "dev": "nodemon api/index.js",
+    "dev": "knex migrate:latest && nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "javascript",
+    "koa",
+    "koa2",
+    "knexjs",
+    "postgresql",
+    "react",
+    "raster",
+    "heroku"
+  ],
+  "author": "Pablo Muñoz <pablomunozgarcia@outlook.com>",
+  "license": "MIT",
   "dependencies": {
     "@koa/cors": "^2.2.3",
     "dotenv": "^8.2.0",

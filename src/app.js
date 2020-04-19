@@ -33,7 +33,7 @@ app.use(
       reset: "Rate-Limit-Reset",
       total: "Rate-Limit-Total",
     },
-    max: RATE_LIMIT_DURATION,
+    max: RATE_LIMIT,
     disableHeader: false,
   })
 );
