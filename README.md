@@ -14,13 +14,13 @@ it features an api using **koa**, connected to a **postgresql** database using *
 
 and...
 
-`npm install`
+`$ npm install`
 
 ### migrations
 
 knex provides a great migration system. to run the migrations:
 
-`knex migrate:latest`
+`$ knex migrate:latest`
 
 all npm scripts run that command first. for more information, refer to knexjs [docs](https://knexjs.org/#Migrations).
 
@@ -28,11 +28,11 @@ all npm scripts run that command first. for more information, refer to knexjs [d
 
 to start the api development:
 
-`npm start dev`
+`$ npm start dev`
 
 then from `src/client`
 
-`npm start`
+`$ npm start`
 
 this will start react's development configuration. by default it will listen to port 3000, so either you change the api port (which by default is 3000 too) or just start reacts after the api and say yes to the prompt which will ask if it should run in another port.
 
@@ -40,11 +40,11 @@ this will start react's development configuration. by default it will listen to 
 
 in order to run a production-ready react build just go to `src/client` and run
 
-`npm run build`
+`$ npm run build`
 
 then, start the server with
 
-`npm start`
+`$ npm start`
 
 which will handle migrations automatically.
 
