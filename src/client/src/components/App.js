@@ -7,7 +7,7 @@ import Error from "./Error";
 import InfiniteScroll from "react-infinite-scroller";
 
 const WISH_ENDPOINT = "api/wish";
-const UNKOWN_ERROR = "unkown error... sorry...";
+const UNKOWN_ERROR = "unknown error... sorry...";
 const ITEMS_PER_PAGE = 10;
 
 const WishesContainer = styled.div`
@@ -19,6 +19,10 @@ const Box = styled.span`
   margin: 1.5rem;
   padding: 0.75rem 1rem;
   display: inline-block;
+`;
+
+const SourceCode = styled.p`
+  color: lightgrey;
 `;
 
 class App extends Component {
@@ -44,8 +48,9 @@ class App extends Component {
     this.setState({ loading: true });
     fetch(WISH_ENDPOINT)
       .then((res) => {
-        if (!res.ok)
+        if (!res.ok) {
           return this.setState({ loading: false, error: UNKOWN_ERROR });
+        }
         return res.json();
       })
       .then((data) => {
@@ -71,8 +76,9 @@ class App extends Component {
         return res.json();
       })
       .then((data) => {
-        if (!data || data.wishes.length === 0)
+        if (!data || data.wishes.length === 0) {
           return this.setState({ moreWishes: false });
+        }
 
         let wishes = this.state.wishes;
         wishes.push(...data.wishes);
@@ -93,8 +99,9 @@ class App extends Component {
       },
       body: JSON.stringify(wish),
     }).then((response) => {
-      if (response.status === 500)
+      if (response.status === 500) {
         return this.setState({ error: UNKOWN_ERROR });
+      }
       response.json().then((data) => {
         if (data.error) return this.setState({ error: data.error });
         let wishes = this.state.wishes;
@@ -120,6 +127,11 @@ class App extends Component {
           </header>
           {this.state.error ? <Error error={this.state.error} /> : null}
           <WishForm onSubmit={this.postWish} />
+          <SourceCode>
+            see the <a href="https://github.com/palpfiction/quarantine-wishes">
+              source code
+            </a>
+          </SourceCode>
         </r-cell>
         <r-cell
           span="4"
@@ -135,13 +147,15 @@ class App extends Component {
             element={WishesContainer}
           >
             <>
-              {this.state.wishes.length === 0 && !this.state.moreWishes ? (
-                <Box>no wishes yet... dare to send the first one?</Box>
-              ) : (
-                this.state.wishes.map((wish) => (
-                  <Wish {...wish} key={wish.id} />
-                ))
-              )}
+              {this.state.wishes.length === 0 && !this.state.moreWishes
+                ? (
+                  <Box>no wishes yet... dare to send the first one?</Box>
+                )
+                : (
+                  this.state.wishes.map((wish) => (
+                    <Wish {...wish} key={wish.id} />
+                  ))
+                )}
             </>
           </InfiniteScroll>
         </r-cell>

@@ -17,7 +17,7 @@ router.get(`${BASE_PATH}/wish`, async (ctx) => {
 
   const wishes = await service.getAll(
     ctx.vals.limit || LIMIT,
-    ctx.vals.offset || OFFSET
+    ctx.vals.offset || OFFSET,
   );
 
   ctx.ok({ wishes });
@@ -27,8 +27,9 @@ router.get(`${BASE_PATH}/wish/:id`, async (ctx) => {
   ctx.validateParam("id").required("id must be provided").toInt();
 
   const wish = await service.get(ctx.vals.id);
-  if (!wish)
+  if (!wish) {
     return ctx.notFound({ error: `wish with id ${ctx.vals.id} not found` });
+  }
 
   ctx.ok(wish);
 });
@@ -53,10 +54,11 @@ router.post(`${BASE_PATH}/wish`, async (ctx) => {
     created: date(),
   });
 
-  if (!wish)
+  if (!wish) {
     return ctx.internalServerError({
       error: `i don't really know what happened...`,
     });
+  }
 
   ctx.ok(wish);
 });
@@ -66,10 +68,11 @@ router.delete(`${BASE_PATH}/wish/:id`, async (ctx) => {
 
   const removed = await service.remove(ctx.vals.id);
 
-  if (!removed)
+  if (!removed) {
     return ctx.notFound({
       error: `i couldn't find wish with id ${ctx.vals.id}`,
     });
+  }
   ctx.ok({ message: "done!" });
 });
 
